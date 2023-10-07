@@ -46,24 +46,23 @@ namespace ShoppingStore_DlloSat.Controllers
             return View(country);
         }
 
-        // GET: Countries/Create
+        // GET: Countries/Create (Obtener) //GET = SELECT
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Countries/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Countries/Create (Crear) //POST = CREATE
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Id,CreateDate,ModifieDate")] Country country)
+        public async Task<IActionResult> Create (Country country)
         {
             if (ModelState.IsValid)
             {
                 country.Id = Guid.NewGuid();
                 _context.Add(country);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();//Aquí va a la capa MODEL y GUARDA el país en la tabla Countries
                 return RedirectToAction(nameof(Index));
             }
             return View(country);
