@@ -1,5 +1,5 @@
-﻿@model ShoppingStore_DlloSat.DAL.Entities.Country
-
+﻿@model ShoppingStore_DlloSat.DAL.Entities.Country//Las vistas siempre reciben un modelo (IEnumerable), Para este caso, trae una lista de países
+                                                    
 @{
     ViewData["Title"] = "Create";
 }
@@ -16,16 +16,6 @@
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreateDate" class="control-label"></label>
-                <input asp-for="CreateDate" class="form-control" />
-                <span asp-validation-for="CreateDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifieDate" class="control-label"></label>
-                <input asp-for="ModifieDate" class="form-control" />
-                <span asp-validation-for="ModifieDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Crear del post" class="btn btn-primary" />

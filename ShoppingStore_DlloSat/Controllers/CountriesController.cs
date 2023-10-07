@@ -12,8 +12,10 @@ namespace ShoppingStore_DlloSat.Controllers
 {
     public class CountriesController : Controller
     {
+        //Se crea el parámetro readonly que es el que se va a manejar para el resto de la clase: _context 
         private readonly DataBaseContext _context;
 
+        //Patrón de diseño llamado INYECCIÓN DE DEPENDECIAS
         public CountriesController(DataBaseContext context)
         {
             _context = context;
@@ -24,7 +26,7 @@ namespace ShoppingStore_DlloSat.Controllers
         {
               return _context.Countries != null ? 
                           View(await _context.Countries.ToListAsync()) :
-                          Problem("Entity set 'DataBaseContext.Countries'  is null.");
+                          Problem("Entity set 'DataBaseContext.Countries'  is null.");//IF ternario. El signo ? = ENTONCES, los : = SINO 
         }
 
         // GET: Countries/Details/5
@@ -56,12 +58,13 @@ namespace ShoppingStore_DlloSat.Controllers
         // POST: Countries/Create (Crear) //POST = CREATE
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create (Country country)
+        public async Task<IActionResult> Create (Country country)//Captura el objeto country con sus propiedades
         {
             if (ModelState.IsValid)
             {
                 country.Id = Guid.NewGuid();
-                _context.Add(country);
+                country.CreateDate = DateTime.Now;//Aquí se automatiza el CreateDate de un objeto
+                _context.Add(country);//Método Add() crea una BD
                 await _context.SaveChangesAsync();//Aquí va a la capa MODEL y GUARDA el país en la tabla Countries
                 return RedirectToAction(nameof(Index));
             }
@@ -85,9 +88,7 @@ namespace ShoppingStore_DlloSat.Controllers
         }
 
         // POST: Countries/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPut]
+       [HttpPut]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Name,Id,CreateDate,ModifieDate")] Country country)
         {
@@ -100,8 +101,9 @@ namespace ShoppingStore_DlloSat.Controllers
             {
                 try
                 {
-                    _context.Update(country);
-                    await _context.SaveChangesAsync();
+                    country.ModifieDate = DateTime.Now;//Se automatiza la fecha de moficación de la tabla Countries
+                    _context.Update(country);//Método Update() actualiza obj en BD
+                    await _context.SaveChangesAsync();//Aquí se hace el update en BD
                 }
                 catch (DbUpdateConcurrencyException)
                 {
