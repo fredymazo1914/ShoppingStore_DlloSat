@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Editar</h1>
 
 <h4>Country</h4>
 <hr />
@@ -18,9 +18,11 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreateDate" />@*Este código*@
+            
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+                <input type="submit" value="Save" class="btn btn-primary"/>
+             </div>
         </form>
     </div>
 </div>

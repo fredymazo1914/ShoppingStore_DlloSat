@@ -22,10 +22,10 @@ namespace ShoppingStore_DlloSat.Controllers
         }
 
         // GET: Countries
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()//Métodos es igual a acciones del controlador
         {
               return _context.Countries != null ? 
-                          View(await _context.Countries.ToListAsync()) :
+                          View(await _context.Countries.ToListAsync()) ://El método ToListAsync() sirve para consultar una lista
                           Problem("Entity set 'DataBaseContext.Countries'  is null.");//IF ternario. El signo ? = ENTONCES, los : = SINO 
         }
 
@@ -38,8 +38,8 @@ namespace ShoppingStore_DlloSat.Controllers
                 return NotFound();
             }
 
-            var country = await _context.Countries
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var country = await _context.Countries.FirstOrDefaultAsync(c => c.Id == id);//Esta es la línea que trae los 20 M de Countries
+            //El método FirstOrDefaultAsync() sirve para consultar un objeto y se usa con notación landa (c => c.Id == id)
             if (country == null)
             {
                 return NotFound();
@@ -66,7 +66,7 @@ namespace ShoppingStore_DlloSat.Controllers
                 country.CreateDate = DateTime.Now;//Aquí se automatiza el CreateDate de un objeto
                 _context.Add(country);//Método Add() crea una BD
                 await _context.SaveChangesAsync();//Aquí va a la capa MODEL y GUARDA el país en la tabla Countries
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
             }
             return View(country);
         }
@@ -79,7 +79,7 @@ namespace ShoppingStore_DlloSat.Controllers
                 return NotFound();
             }
 
-            var country = await _context.Countries.FindAsync(id);
+            var country = await _context.Countries.FindAsync(id);//Aquí voy a la BD y traigo ese país con ese id
             if (country == null)
             {
                 return NotFound();
@@ -103,7 +103,8 @@ namespace ShoppingStore_DlloSat.Controllers
                 {
                     country.ModifieDate = DateTime.Now;//Se automatiza la fecha de moficación de la tabla Countries
                     _context.Update(country);//Método Update() actualiza obj en BD
-                    await _context.SaveChangesAsync();//Aquí se hace el update en BD
+                    await _context.SaveChangesAsync();  //Aquí se hace el update en BD
+                                                        //También va la capa MODEL y GUARDA el país en la tabla Countries
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -129,8 +130,7 @@ namespace ShoppingStore_DlloSat.Controllers
                 return NotFound();
             }
 
-            var country = await _context.Countries
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var country = await _context.Countries.FirstOrDefaultAsync(c => c.Id == id);
             if (country == null)
             {
                 return NotFound();
@@ -149,13 +149,14 @@ namespace ShoppingStore_DlloSat.Controllers
                 return Problem("Entity set 'DataBaseContext.Countries'  is null.");
             }
             var country = await _context.Countries.FindAsync(id);
+            
             if (country != null)
             {
-                _context.Countries.Remove(country);
+                _context.Countries.Remove(country);//El método Remove () es para eliminar el país
             }
             
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            await _context.SaveChangesAsync();//Se elimina el país en la BD 
+            return RedirectToAction(nameof(Index));//Se redirecciona al index de país
         }
 
         private bool CountryExists(Guid id)
