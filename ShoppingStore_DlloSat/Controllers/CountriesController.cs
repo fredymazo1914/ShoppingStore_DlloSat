@@ -62,11 +62,21 @@ namespace ShoppingStore_DlloSat.Controllers
         {
             if (ModelState.IsValid)
             {
-                country.Id = Guid.NewGuid();
-                country.CreateDate = DateTime.Now;//Aquí se automatiza el CreateDate de un objeto
-                _context.Add(country);//Método Add() crea una BD
-                await _context.SaveChangesAsync();//Aquí va a la capa MODEL y GUARDA el país en la tabla Countries
+                try
+                {
+                    country.Id = Guid.NewGuid();
+                    country.CreateDate = DateTime.Now;//Aquí se automatiza el CreateDate de un objeto
+                    _context.Add(country);//Método Add() crea una BD
+                    await _context.SaveChangesAsync();//Aquí va a la capa MODEL y GUARDA el país en la tabla Countries
                     return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException ex)
+                {
+                    if(ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Ya existe un país con el mismo nombre");
+                    }
+                }
             }
             return View(country);
         }
@@ -90,7 +100,7 @@ namespace ShoppingStore_DlloSat.Controllers
         // POST: Countries/Edit/5
        [HttpPut]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Id,CreateDate,ModifieDate")] Country country)
+        public async Task<IActionResult> Edit(Guid id, Country country)
         {
             if (id != country.Id)
             {
@@ -105,6 +115,7 @@ namespace ShoppingStore_DlloSat.Controllers
                     _context.Update(country);//Método Update() actualiza obj en BD
                     await _context.SaveChangesAsync();  //Aquí se hace el update en BD
                                                         //También va la capa MODEL y GUARDA el país en la tabla Countries
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -117,7 +128,13 @@ namespace ShoppingStore_DlloSat.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Ya existe un país con el mismo nombre");
+                    }
+                }
             }
             return View(country);
         }

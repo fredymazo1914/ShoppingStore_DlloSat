@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 //Con esta línea se puede crear la BD y usar la instancia de SQL que tengo en VStudio
-builder.Services.AddDbContext<DataBaseContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<DataBaseContext>(o => o.UseSqlServer
+    (builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 
