@@ -98,7 +98,7 @@ namespace ShoppingStore_DlloSat.Controllers
         }
 
         // POST: Countries/Edit/5
-       [HttpPut]
+       [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, Country country)
         {

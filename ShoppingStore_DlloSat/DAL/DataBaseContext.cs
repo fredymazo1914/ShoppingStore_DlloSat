@@ -18,10 +18,14 @@ namespace ShoppingStore_DlloSat.DAL
             base.OnModelCreating(modelBuilder);
             //La siguiente línea comtrola la duplicidad de los países
             modelBuilder.Entity<Country>().HasIndex(c => c.Name).IsUnique();
+            
+            modelBuilder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
+
         }
 
         //DbSet sirve para convertir la clase Country en una tabla de BD.
         //El nombre de la tabla será "Contries"
         public DbSet<Country> Countries { get; set; }
+        public DbSet<Category> Categories { get; set; }
      }
 }
